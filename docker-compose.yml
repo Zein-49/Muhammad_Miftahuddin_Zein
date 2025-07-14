@@ -1,0 +1,35 @@
+# Hapus baris 'version: "3.8"'
+
+services:
+  app:
+    build: .
+    container_name: tani-app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: tani-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tani_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  adminer: # Tambahkan service ini
+    image: adminer
+    container_name: tani-adminer
+    ports:
+      - 8081:8080 # Akses Adminer di http://localhost:8081
+    depends_on:
+      - db
+
+volumes:
+  dbdata:
